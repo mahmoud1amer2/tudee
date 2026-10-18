@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079162665341",
+    "project_id": "tudee-69510",
+    "storage_bucket": "tudee-69510.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079162665341:android:2da3f16d08b8ec36b5b414",
+        "android_client_info": {
+          "package_name": "com.example.untitled3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt8u11IWanuojkc3eTzyFPRXAjahi-uD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

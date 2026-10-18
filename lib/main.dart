@@ -1,22 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'models/task_model.dart';
+import 'package:untitled3/firebase_options.dart';
+
 import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await Hive.initFlutter();
-
-  Hive.registerAdapter(TaskAdapter());
-
-  await Hive.openBox<Task>('tasksBox');
-
-  runApp(const TudeeApp());
+  runApp(TudeeApp());
 }
 
 class TudeeApp extends StatelessWidget {
-  const TudeeApp({super.key});
+   TudeeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +32,7 @@ class TudeeApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }

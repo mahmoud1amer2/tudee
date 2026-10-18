@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../models/task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -22,15 +21,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     final text = _taskController.text.trim();
     if (text.isEmpty) return;
 
-    final newTask = Task(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: text,
-      isDone: false,
-    );
-
-    // تخزين المهمة مباشرة داخل صندوق Hive
-    final box = Hive.box<Task>('tasksBox');
-    await box.add(newTask);
+    // حفظ المهمة الجديدة في Firebase Firestore
+    await FirebaseFirestore.instance.collection('tasks').add({
+      'title': text,
+      'isDone': false,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -39,18 +35,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tudee'),
-      ),
+      appBar: AppBar(title: const Text('Tudee')),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(left: 16, top: 32, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Add Task",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black87),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    "Add Task",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Icon(Icons.note_add_sharp),
+                ],
               ),
               const SizedBox(height: 35),
               TextField(
@@ -65,18 +69,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 19),
+              const SizedBox(height: 19),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF38BDF8),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
                   ),
                   onPressed: _saveTask,
-                  child: const Text('Save', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                  child:  Text(
+                    'Save',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
